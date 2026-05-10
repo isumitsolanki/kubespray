@@ -173,6 +173,16 @@
     msg: The selected choice is not supported
   run_once: true
 
+- name: Stop if dns_mode expects Kubespray CoreDNS but deploy_coredns is false
+  assert:
+    that:
+      - deploy_coredns | default(true) | bool
+    msg: >-
+      dns_mode is '{{ dns_mode }}' but deploy_coredns is false. Kubespray skips kubeadm's CoreDNS phase by default;
+      CoreDNS must be applied from kubernetes-apps. Set deploy_coredns to true or use dns_mode manual/none if you provide DNS yourself.
+  run_once: true
+  when: dns_mode in ['coredns', 'coredns_dual']
+
 - name: Warn if `enable_dual_stack_networks` is set
   debug:
     msg: "WARNING! => `enable_dual_stack_networks` deprecation. Please switch to using ipv4_stack and ipv6_stack."

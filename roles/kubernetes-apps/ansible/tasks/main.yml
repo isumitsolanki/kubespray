@@ -9,13 +9,13 @@
   until: result.status == 200
   retries: 20
   delay: 1
-  when: inventory_hostname == groups['kube_control_plane'][0]
+  when: inventory_hostname == first_kube_control_plane
 
 - name: Kubernetes Apps | CoreDNS
   command:
     cmd: "{{ kubectl_apply_stdin }}"
     stdin: "{{ lookup('template', item) }}"
-  delegate_to: "{{ groups['kube_control_plane'][0] }}"
+  delegate_to: "{{ first_kube_control_plane }}"
   run_once: true
   loop: "{{ coredns_manifests | flatten }}"
   tags:
@@ -30,7 +30,7 @@
   command:
     cmd: "{{ kubectl_apply_stdin }}"
     stdin: "{{ lookup('template', item) }}"
-  delegate_to: "{{ groups['kube_control_plane'][0] }}"
+  delegate_to: "{{ first_kube_control_plane }}"
   run_once: true
   loop: "{{ coredns_manifests | flatten }}"
   tags:
@@ -46,7 +46,7 @@
   command:
     cmd: "{{ kubectl_apply_stdin }}"
     stdin: "{{ lookup('template', item) }}"
-  delegate_to: "{{ groups['kube_control_plane'][0] }}"
+  delegate_to: "{{ first_kube_control_plane }}"
   run_once: true
   loop: "{{ nodelocaldns_manifests | flatten }}"
   when:
@@ -79,7 +79,7 @@
   command:
     cmd: "{{ kubectl_apply_stdin }}"
     stdin: "{{ lookup('template', item) }}"
-  delegate_to: "{{ groups['kube_control_plane'][0] }}"
+  delegate_to: "{{ first_kube_control_plane }}"
   run_once: true
   loop:
     - etcd_metrics-endpoints.yml.j2
