@@ -125,7 +125,7 @@ kube_ovn_dpdk_version: "19.11-v{{ kube_ovn_version }}"
 kube_router_version: "2.1.1"
 multus_version: "4.2.2"
 helm_version: "{{ (helm_archive_checksums['amd64'] | dict2items)[0].key }}"
-nerdctl_version: "{{ (nerdctl_archive_checksums['amd64'] | dict2items)[0].key }}"
+nerdctl_version: "{{ (nerdctl_archive_checksums[image_arch] | dict2items)[0].key }}"
 skopeo_version: "{{ (skopeo_binary_checksums['amd64'] | dict2items)[0].key }}"
 
 pod_infra_version: "{{ pod_infra_supported_versions[kube_major_version] }}"
